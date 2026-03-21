@@ -1,0 +1,29 @@
+import java.util.ArrayList;
+
+class Solution {
+    public ArrayList<Integer> countBSTs(int[] arr) {
+        int n = arr.length;
+        ArrayList<Integer> result = new ArrayList<>();
+        
+        int[] catalan = {1, 1, 2, 5, 14, 42, 132};
+        
+        for (int i = 0; i < n; i++) {
+            int root = arr[i];
+            int leftCount = 0;
+            int rightCount = 0;
+            
+            for (int j = 0; j < n; j++) {
+                if (i == j) continue;
+                if (arr[j] < root) {
+                    leftCount++;
+                } else {
+                    rightCount++;
+                }
+            }
+            
+            result.add(catalan[leftCount] * catalan[rightCount]);
+        }
+        
+        return result;
+    }
+}
