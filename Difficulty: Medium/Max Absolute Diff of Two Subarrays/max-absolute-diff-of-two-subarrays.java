@@ -1,0 +1,55 @@
+class Solution {
+    public int maxDiffSubArrays(int[] arr) {
+        int n = arr.length;
+        
+        int[] leftMax = new int[n];
+        int[] leftMin = new int[n];
+        int[] rightMax = new int[n];
+        int[] rightMin = new int[n];
+        
+        // Compute Max and Min subarray sums from Left to Right
+        int currentMax = arr[0], maxSoFar = arr[0];
+        int currentMin = arr[0], minSoFar = arr[0];
+        leftMax[0] = maxSoFar;
+        leftMin[0] = minSoFar;
+        
+        for (int i = 1; i < n; i++) {
+            currentMax = Math.max(arr[i], currentMax + arr[i]);
+            maxSoFar = Math.max(maxSoFar, currentMax);
+            leftMax[i] = maxSoFar;
+            
+            currentMin = Math.min(arr[i], currentMin + arr[i]);
+            minSoFar = Math.min(minSoFar, currentMin);
+            leftMin[i] = minSoFar;
+        }
+        
+        // Compute Max and Min subarray sums from Right to Left
+        currentMax = arr[n - 1]; maxSoFar = arr[n - 1];
+        currentMin = arr[n - 1]; minSoFar = arr[n - 1];
+        rightMax[n - 1] = maxSoFar;
+        rightMin[n - 1] = minSoFar;
+        
+        for (int i = n - 2; i >= 0; i--) {
+            currentMax = Math.max(arr[i], currentMax + arr[i]);
+            maxSoFar = Math.max(maxSoFar, currentMax);
+            rightMax[i] = maxSoFar;
+            
+            currentMin = Math.min(arr[i], currentMin + arr[i]);
+            minSoFar = Math.min(minSoFar, currentMin);
+            rightMin[i] = minSoFar;
+        }
+        
+        // Find the maximum absolute difference across all split points
+        int maxDiff = Integer.MIN_VALUE;
+        for (int i = 0; i < n - 1; i++) {
+            // Case 1: Max on left, Min on right
+            int diff1 = Math.abs(leftMax[i] - rightMin[i + 1]);
+            // Case 2: Min on left, Max on right
+            int diff2 = Math.abs(leftMin[i] - rightMax[i + 1]);
+            
+            maxDiff = Math.max(maxDiff, Math.max(diff1, diff2));
+        }
+        
+        return maxDiff;
+    }
+}
